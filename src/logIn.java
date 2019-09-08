@@ -1,4 +1,5 @@
 
+import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -41,8 +42,10 @@ public void checkpass(){
     int x=reg.confirmpass(pw, cpw);
     if(x==1){
         dislabel.setText("Match");
+        dislabel.setForeground(Color.blue);
     }else{
         dislabel.setText("Not Match");
+        dislabel.setForeground(Color.red);
     }
     
 }
