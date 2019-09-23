@@ -21,10 +21,12 @@ public class logIn extends javax.swing.JFrame {
     public logIn() {
         initComponents();
         this.setLocationRelativeTo(null);
+       
     }
 register reg = new register();
 sess ses = new sess();
 String unamelog;
+product addp=new product();
 
 
 public void clearReg(){
@@ -43,9 +45,11 @@ public void checkpass(){
     if(x==1){
         dislabel.setText("Match");
         dislabel.setForeground(Color.blue);
+        repassfield.setBackground(Color.green);
     }else{
         dislabel.setText("Not Match");
         dislabel.setForeground(Color.red);
+           repassfield.setBackground(Color.red);
     }
     
 }
@@ -67,7 +71,7 @@ public void checkpass(){
             wel.setVisible(true);
             
             wel.setLocationRelativeTo(null);
-            
+           // addproduct.setVisible(true);
             this.setVisible(false);
             
         }
