@@ -1,6 +1,7 @@
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -37,12 +38,14 @@ public class welcomepage extends javax.swing.JFrame {
     
     public welcomepage(String uname){
         initComponents();
-        jdisplay.setText(uname);
+        //display.setText(uname);
         showtable();
         
         
         
     }
+    
+    
 product addp=new product();
 connt cn = new connt();  
 int id=0;
@@ -67,8 +70,6 @@ public void pp(){
     //JOptionPane.showMessageDialog(rootPane, "done!");
     
     
-    
-   
 }
 public void showtable(){
     DefaultTableModel mod = (DefaultTableModel) jtb.getModel();
@@ -89,8 +90,34 @@ public void showtable(){
             Logger.getLogger(welcomepage.class.getName()).log(Level.SEVERE, null, ex);
         }
 }
+public void searchBox(String prodname){
+    
+    String sql="Select * from product where prod_id like ? or prod_name like ?;";
+     DefaultTableModel mod = (DefaultTableModel) jtb.getModel();
+    mod.setRowCount(0);
+    try{
+    Class.forName("com.mysql.jdbc.Driver");
+    Connection con = DriverManager.getConnection(cn.url, cn.username, cn.password);
+    PreparedStatement pstmt=con.prepareStatement(sql);
+    
+    pstmt.setString(1,"%"+prodname+"%");
+    pstmt.setString(2,"%"+prodname+"%");
+    
+    
+    ResultSet rs=pstmt.executeQuery();
+    
+     while(rs.next()){
+        mod.addRow(new Object[]{rs.getString("Prod_ID"),rs.getString("Prod_name"),rs.getString("prod_quantity"),rs.getString("prod_price")});
+    }
+    
+    
+}       catch (ClassNotFoundException ex) {
+            Logger.getLogger(welcomepage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(welcomepage.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -114,12 +141,12 @@ public void showtable(){
         jScrollPane1 = new javax.swing.JScrollPane();
         jtb = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        user_label = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jdisplay = new javax.swing.JLabel();
+        search_tf = new javax.swing.JTextField();
+        jButton6 = new javax.swing.JButton();
 
         addproduct.setMinimumSize(new java.awt.Dimension(400, 320));
 
@@ -270,7 +297,24 @@ public void showtable(){
             }
         });
 
-        jdisplay.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        search_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        search_tf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                search_tfActionPerformed(evt);
+            }
+        });
+        search_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                search_tfKeyReleased(evt);
+            }
+        });
+
+        jButton6.setText("Search");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -280,41 +324,42 @@ public void showtable(){
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton3)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jdisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(user_label, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(search_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(user_label, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jdisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(search_tf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton6)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                        .addComponent(jButton5))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(jButton3))
         );
 
@@ -465,6 +510,25 @@ this.setVisible(true);
         // TODO add your handling code here:
     }//GEN-LAST:event_editbtnActionPerformed
 
+    private void search_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_tfActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        String prodname = search_tf.getText();
+       this.searchBox(prodname);
+       
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void search_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_tfKeyReleased
+ String prodname = search_tf.getText();
+       this.searchBox(prodname);        
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_search_tfKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -513,15 +577,17 @@ this.setVisible(true);
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel jdisplay;
     private javax.swing.JTable jtb;
     private javax.swing.JFormattedTextField prod_price;
     private javax.swing.JSpinner prod_quant;
-    private javax.swing.JLabel user_label;
+    private javax.swing.JTextField search_tf;
+    private javax.swing.JTextField uname_txt;
+    private javax.swing.JTextField uname_txt1;
     // End of variables declaration//GEN-END:variables
 }
