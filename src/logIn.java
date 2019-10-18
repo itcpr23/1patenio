@@ -29,6 +29,7 @@ String unamelog;
 product addp=new product();
 
 
+
 public void clearReg(){
     ftxtfield.setText("");
             ltxtfield.setText("");

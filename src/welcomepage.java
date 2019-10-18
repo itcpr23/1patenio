@@ -32,6 +32,7 @@ public class welcomepage extends javax.swing.JFrame {
         initComponents();
         //jdisplay.setText(unamelog);
         showtable();
+        
     }
     
     public welcomepage(String uname){
@@ -44,6 +45,7 @@ public class welcomepage extends javax.swing.JFrame {
     }
 product addp=new product();
 connt cn = new connt();  
+int id=0;
 
 
 
@@ -76,6 +78,7 @@ public void showtable(){
     Connection con = DriverManager.getConnection(cn.url, cn.username, cn.password);
     Statement st = con.createStatement();
     ResultSet rs = st.executeQuery("Select * from product");
+    
     while(rs.next()){
         mod.addRow(new Object[]{rs.getString("Prod_ID"),rs.getString("Prod_name"),rs.getString("prod_quantity"),rs.getString("prod_price")});
     }
@@ -103,10 +106,11 @@ public void showtable(){
         add_prod = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
+        addbtn = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        addp_label = new javax.swing.JLabel();
+        editbtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtb = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -134,10 +138,10 @@ public void showtable(){
 
         jLabel13.setText("Quantity");
 
-        jButton6.setText("Add");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        addbtn.setText("Add");
+        addbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                addbtnActionPerformed(evt);
             }
         });
 
@@ -151,24 +155,28 @@ public void showtable(){
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setText("Add Product");
+        addp_label.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        addp_label.setText("Add Product");
+
+        editbtn.setText("Edit");
+        editbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editbtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout addproductLayout = new javax.swing.GroupLayout(addproduct.getContentPane());
         addproduct.getContentPane().setLayout(addproductLayout);
         addproductLayout.setHorizontalGroup(
             addproductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addproductLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(161, 161, 161))
+            .addGroup(addproductLayout.createSequentialGroup()
+                .addGroup(addproductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2)
+                    .addComponent(addp_label))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(addproductLayout.createSequentialGroup()
                 .addGap(61, 61, 61)
                 .addGroup(addproductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(addproductLayout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(prod_price, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(addproductLayout.createSequentialGroup()
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -176,18 +184,20 @@ public void showtable(){
                     .addGroup(addproductLayout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(add_prod, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(add_prod, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(addproductLayout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(addproductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(addbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(prod_price, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(editbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(104, Short.MAX_VALUE))
-            .addGroup(addproductLayout.createSequentialGroup()
-                .addGroup(addproductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
-                    .addComponent(jLabel2))
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         addproductLayout.setVerticalGroup(
             addproductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addproductLayout.createSequentialGroup()
-                .addComponent(jLabel2)
+                .addComponent(addp_label)
                 .addGap(45, 45, 45)
                 .addGroup(addproductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(add_prod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -201,7 +211,9 @@ public void showtable(){
                     .addComponent(prod_price, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14))
                 .addGap(28, 28, 28)
-                .addComponent(jButton6)
+                .addGroup(addproductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addbtn)
+                    .addComponent(editbtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
                 .addComponent(jButton2))
         );
@@ -251,7 +263,12 @@ public void showtable(){
             }
         });
 
-        jButton5.setText("Update");
+        jButton5.setText("Edit");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jdisplay.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
@@ -310,7 +327,7 @@ public void showtable(){
         // TODO add your handling code here:
     }//GEN-LAST:event_add_prodActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void addbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbtnActionPerformed
         //String prodname=add_prod.getText();
         //int quant=(int) prod_quant.getValue();
         //float price=(float) prod_price.getValue();
@@ -325,11 +342,13 @@ public void showtable(){
        // }
 
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_addbtnActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-addproduct.setVisible(true);addproduct.setLocationRelativeTo(null);
+addproduct.setVisible(true);
+addproduct.setLocationRelativeTo(null);
+editbtn.setEnabled(false);
 this.setVisible(false);
 
         // TODO add your handling code here:
@@ -386,6 +405,66 @@ this.setVisible(true);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+         //int i=jtb.getSelectedRow();
+         int i=jtb.getSelectedRow();
+        
+        if(i==-1){
+            JOptionPane.showMessageDialog(rootPane, "Please Select ROw to Edit");
+        }
+        else{
+            addproduct.setVisible(true);
+            addproduct.setLocationRelativeTo(null);
+            this.setVisible(false);
+            prod_quant.setEnabled(false);
+            addp_label.setText("Edit Product");
+            addbtn.setEnabled(false);
+            
+            
+            id=Integer.parseInt(jtb.getValueAt(i, 0).toString());
+            
+            String pname=jtb.getValueAt(i,1).toString();
+            String price=jtb.getValueAt(i, 3).toString();
+            int qty =Integer.parseInt( jtb.getValueAt(i, 2).toString());
+            
+            add_prod.setText(pname);
+            prod_quant.setValue(qty);
+            prod_price.setText(price);
+            
+            
+            
+            }
+    
+         
+        
+
+        // TODO add your handling code here cute c mamai;
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void editbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editbtnActionPerformed
+        
+        String newprodname = add_prod.getText();
+        float newprice =Float.parseFloat( prod_price.getValue().toString());
+        
+        int f = addp.editprod(id, newprodname, newprice);
+        
+        if(f==1){
+            JOptionPane.showMessageDialog(addproduct,"Product Edit Successfully!");
+            addproduct.setVisible(false);
+            this.showtable();
+            this.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(addproduct, "There Was a Problem Editing Prodcut","ERROR",JOptionPane.ERROR_MESSAGE);
+            
+        }
+        
+        
+        
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editbtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -425,18 +504,19 @@ this.setVisible(true);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField add_prod;
+    private javax.swing.JButton addbtn;
+    private javax.swing.JLabel addp_label;
     private javax.swing.JFrame addproduct;
+    private javax.swing.JButton editbtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel jdisplay;
     private javax.swing.JTable jtb;

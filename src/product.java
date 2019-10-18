@@ -20,6 +20,70 @@ import java.util.logging.Logger;
 public class product {
      connt con = new connt();
      
+     
+     public int editprod(int id,String prodname,float price){
+       int f=0;
+       
+       String sql="Update product set prod_name = ? ,prod_price = ? where Prod_ID = ?";
+         
+         try{
+             
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = (Connection) DriverManager.getConnection(con.url,con.username,con.password);
+            PreparedStatement pstmt=(PreparedStatement)conn.prepareStatement(sql);
+            
+            pstmt.setString(1, prodname);
+            pstmt.setFloat(2, price);
+            pstmt.setInt(3, id);
+            
+          f = pstmt.executeUpdate();
+            
+            
+       
+         
+         
+         } catch (ClassNotFoundException ex) {
+             Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (SQLException ex) {
+             Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         return f;
+     }
+     
+     
+     public int Deleteproduct(Object id){
+         int x=0;
+         
+         String sql="Delete from product where Prod_ID=?;";
+         
+         try{
+             
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = (Connection) DriverManager.getConnection(con.url,con.username,con.password);
+            PreparedStatement pstmt=(PreparedStatement)conn.prepareStatement(sql);
+            
+            int nwid=Integer.parseInt(id.toString());
+            pstmt.setInt(1, nwid);
+            
+           x= pstmt.executeUpdate();
+            
+            //System.out.println(pstmt);
+            
+            
+            
+            
+            
+            
+         } catch (ClassNotFoundException ex) {
+             Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (SQLException ex) {
+             Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         
+         return x;
+     }
+     
+     
      public int addproduct1(String product,int quantity,Float price){
          int i=0;
          
@@ -71,6 +135,8 @@ public class product {
          }
       return i;
     }
+
+    
    
 }
      
