@@ -1,4 +1,4 @@
-
+                                                                          
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -19,6 +19,37 @@ import java.util.logging.Logger;
  */
 public class product {
      connt con = new connt();
+     
+     public int addQuantity(int id, int quantity){
+         
+         int x=0;
+       
+          String sql="Update product set prod_quantity = prod_quantity + ?  where Prod_ID = ?";
+         
+         try{
+             
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = (Connection) DriverManager.getConnection(con.url,con.username,con.password);
+            PreparedStatement pstmt=(PreparedStatement)conn.prepareStatement(sql);
+            
+            pstmt.setInt(1,quantity);
+            pstmt.setInt(2,id);
+            
+            x=pstmt.executeUpdate();
+            
+            
+         }
+         
+         catch (ClassNotFoundException ex) {
+             Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (SQLException ex) {
+             Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         
+         return x;
+     }
+     
+     
      
      
      public int editprod(int id,String prodname,float price){
