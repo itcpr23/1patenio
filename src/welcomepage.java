@@ -1,15 +1,24 @@
 
-import java.sql.Connection;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
-
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -28,26 +37,29 @@ public class welcomepage extends javax.swing.JFrame {
      * Creates new form welcomepage
      */
     public welcomepage() {
-         //logIn lg= new logIn();
-       
         initComponents();
-        //jdisplay.setText(unamelog);
-        showtable();
+        addp.searchBox("", jtb);
+         refreshQuantity.start();
+        checkLowQuantitys.start();
         
     }
     
     public welcomepage(String uname){
         initComponents();
-        //display.setText(uname);
-        showtable();
+         addp.searchBox("", jtb);
+         refreshQuantity.start();
+        checkLowQuantitys.start(); 
         
         
         
     }
+    String getProdname(){
+        return search_tf.getText();
+    }
     
     
 product addp=new product();
-connt con = new connt();  
+connt cons = new connt();  
 int id=0;
 
 
@@ -71,57 +83,69 @@ public void pp(){
     
     
 }
-public void showtable(){
-    DefaultTableModel mod = (DefaultTableModel) jtb.getModel();
-    mod.setRowCount(0);
-    try{
-    Class.forName("com.mysql.jdbc.Driver");
-    Connection conn = DriverManager.getConnection(con.url, con.username,con.password);
-    Statement st = conn.createStatement();
-    ResultSet rs = st.executeQuery("Select * from product");
+
+
+final void refreshQuantitys(String prodname) {
     
-    while(rs.next()){
-        mod.addRow(new Object[]{rs.getString("Prod_ID"),rs.getString("Prod_name"),rs.getString("prod_quantity"),rs.getString("prod_price")});
-    }
-    
-    }   catch (ClassNotFoundException ex) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            com.mysql.jdbc.Connection conn = (com.mysql.jdbc.Connection) DriverManager.getConnection(cons.url, cons.username, cons.password);
+
+            String sql = "SELECT Prod_quantity FROM product WHERE Prod_ID LIKE ? OR Prod_name LIKE ? ";
+            com.mysql.jdbc.PreparedStatement pstmt = (com.mysql.jdbc.PreparedStatement) conn.prepareStatement(sql);
+
+            pstmt.setString(1, "%" + prodname + "%");
+            pstmt.setString(2, "%" + prodname + "%");
+            
+            ResultSet rs = pstmt.executeQuery();
+            
+            DefaultTableModel model = (DefaultTableModel) jtb.getModel();
+            int row = 0;
+            while (rs.next()) {
+                int quantity = rs.getInt("Prod_quantity");
+                //model.addRow(new Object[]{rs.getString("id"), rs.getString("product_name"), rs.getString("quantity"), rs.getString("price")});
+                model.setValueAt(quantity, row, 2);
+                row++;
+            }
+
+        }  catch (ClassNotFoundException ex) {
             Logger.getLogger(welcomepage.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(welcomepage.class.getName()).log(Level.SEVERE, null, ex);
         }
-}
-
-public void searchBox(String prodname){
-    
-    String sql="Select * from product where prod_id like ? or prod_name like ?;";
-     DefaultTableModel mod = (DefaultTableModel) jtb.getModel();
-    mod.setRowCount(0);
-    
-    try{
-    Class.forName("com.mysql.jdbc.Driver");
-    Connection conn = DriverManager.getConnection(con.url, con.username,con.password);
-    PreparedStatement pstmt=conn.prepareStatement(sql);
-    
-    pstmt.setString(1,"%"+prodname+"%");
-    pstmt.setString(2,"%"+prodname+"%");
-    
-                                                             
-    ResultSet rs=pstmt.executeQuery();
-    
-     while(rs.next()){
-        mod.addRow(new Object[]{rs.getString("Prod_ID"),rs.getString("Prod_name"),rs.getString("prod_quantity"),rs.getString("prod_price")});
     }
-    
-    
-}   
-    catch (ClassNotFoundException ex) {
-            Logger.getLogger(welcomepage.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(welcomepage.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 class.getName()).log(Level.SEVERE, null, ex);
-        }
-    
 
-}
+ Thread refreshQuantity = new Thread(new Runnable(){
+            
+            @Override
+            public void run(){
+                try{
+                    while(true){
+                        refreshQuantitys(getProdname());
+                        Thread.sleep(1000);
+                    }                  
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(welcomepage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            });
+ 
+ Thread checkLowQuantitys = new Thread(new Runnable(){
+       Notification ns = new Notification();
+       @Override
+       public void run(){
+           try{
+               while(true){
+                   ns.checkLowProduct();
+                   Thread.sleep(1000);
+               }
+           } catch (InterruptedException ex) {
+               Logger.getLogger(welcomepage.class.getName()).log(Level.SEVERE, null, ex);
+           }
+       }
+    });
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -416,7 +440,7 @@ public void searchBox(String prodname){
         //float price=(float) prod_price.getValue();
 
        // addp.addproduct(prodname, quant, price);
-        pp();showtable(); clearp();
+        pp();addp.searchBox("", jtb);; clearp();
         //if(!"".equals(prodname)&& !"".equals(quant)&& !"".equals(price)){
          //   JOptionPane.showMessageDialog(addproduct,"Please Fill up All Fields");
         //}else{
@@ -435,8 +459,6 @@ editbtn.setVisible(false);
 addqtybtn.setVisible(false);
 currentqty.setEnabled(false);
 addproduct.setAlwaysOnTop(true);
-
-
 
 add_prod.setText("");
 add_prod.setEnabled(true);
@@ -495,7 +517,7 @@ this.setVisible(true);
                     
                     if(j==1){
                         JOptionPane.showMessageDialog(rootPane, "Product "+prodname+" Deleted","Product Deleted",JOptionPane.WARNING_MESSAGE);
-                        showtable();
+                        addp.searchBox("", jtb);
                     }
                 }
             }
@@ -562,7 +584,7 @@ this.setVisible(true);
         if(f==1){
             JOptionPane.showMessageDialog(addproduct,"Product Edit Successfully!");
             addproduct.setVisible(false);
-            this.showtable();
+            addp.searchBox("", jtb);
             this.setVisible(true);
         }else{
             JOptionPane.showMessageDialog(addproduct, "There Was a Problem Editing Prodcut","ERROR",JOptionPane.ERROR_MESSAGE);
@@ -590,8 +612,8 @@ this.setVisible(true);
 
     private void search_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_tfKeyReleased
  String prodname = search_tf.getText();
-       this.searchBox(prodname);        
-
+ addp.searchBox(prodname, jtb);
+         
 // TODO add your handling code here:
     }//GEN-LAST:event_search_tfKeyReleased
 
@@ -606,7 +628,7 @@ this.setVisible(true);
                 if(c==1){
                     JOptionPane.showMessageDialog(addproduct,"Product Quantity Updated!");
                     addproduct.setVisible(false);
-                    showtable();
+                    addp.searchBox("", jtb);
                 }
             }
             
