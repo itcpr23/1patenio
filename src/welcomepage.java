@@ -53,7 +53,7 @@ public class welcomepage extends javax.swing.JFrame {
         
         
     }
-    String getProdname(){
+    String getProd_name(){
         return search_tf.getText();
     }
     
@@ -73,11 +73,9 @@ public void clearp(){
 }
 public void pp(){
     
-    String prodname=add_prod.getText();
-    int quant=(int) prod_quant.getValue();
-    Float pprice=Float.parseFloat(prod_price.getValue().toString());
-    addp.addproduct1(prodname, quant, pprice);
-    JOptionPane.showMessageDialog(addproduct, "Successfull Added");
+   
+    //addp.addproduct1(prodname, quant, pprice);
+    //JOptionPane.showMessageDialog(addproduct, "Successfull Added");
    
     //JOptionPane.showMessageDialog(rootPane, "done!");
     
@@ -91,7 +89,7 @@ final void refreshQuantitys(String prodname) {
             Class.forName("com.mysql.jdbc.Driver");
             com.mysql.jdbc.Connection conn = (com.mysql.jdbc.Connection) DriverManager.getConnection(cons.url, cons.username, cons.password);
 
-            String sql = "SELECT Prod_quantity FROM product WHERE Prod_ID LIKE ? OR Prod_name LIKE ? ";
+            String sql = "SELECT Prod_quantity FROM product WHERE Prod_id LIKE ? OR prod_name LIKE ? ";
             com.mysql.jdbc.PreparedStatement pstmt = (com.mysql.jdbc.PreparedStatement) conn.prepareStatement(sql);
 
             pstmt.setString(1, "%" + prodname + "%");
@@ -99,13 +97,13 @@ final void refreshQuantitys(String prodname) {
             
             ResultSet rs = pstmt.executeQuery();
             
-            DefaultTableModel model = (DefaultTableModel) jtb.getModel();
+            DefaultTableModel mod = (DefaultTableModel) jtb.getModel();
             int row = 0;
             while (rs.next()) {
                 int quantity = rs.getInt("Prod_quantity");
                 //model.addRow(new Object[]{rs.getString("id"), rs.getString("product_name"), rs.getString("quantity"), rs.getString("price")});
-                model.setValueAt(quantity, row, 2);
-                row++;
+                mod.setValueAt(quantity, row, 2);
+                //row++;
             }
 
         }  catch (ClassNotFoundException ex) {
@@ -121,12 +119,12 @@ final void refreshQuantitys(String prodname) {
             public void run(){
                 try{
                     while(true){
-                        refreshQuantitys(getProdname());
+                        refreshQuantitys(getProd_name());
                         Thread.sleep(1000);
                     }                  
                 } catch (InterruptedException ex) {
                     Logger.getLogger(welcomepage.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                } 
             }
             });
  
@@ -440,7 +438,20 @@ final void refreshQuantitys(String prodname) {
         //float price=(float) prod_price.getValue();
 
        // addp.addproduct(prodname, quant, price);
-        pp();addp.searchBox("", jtb);; clearp();
+        String prodname = add_prod.getText();
+        int quant = (int) prod_quant.getValue();
+        Float pprice = Float.parseFloat(prod_price.getValue().toString());
+       
+        int x = addp.addproduct1(prodname, quant, pprice);
+        if (x == 1) {
+            JOptionPane.showMessageDialog(addproduct, "New Product Added Successfully");
+            clearp();
+            addproduct.setVisible(false);
+            addp.searchBox("", jtb);
+        }
+        
+        //addp.searchBox("", jtb);
+        
         //if(!"".equals(prodname)&& !"".equals(quant)&& !"".equals(price)){
          //   JOptionPane.showMessageDialog(addproduct,"Please Fill up All Fields");
         //}else{
@@ -547,6 +558,8 @@ this.setVisible(true);
         else{
             addproduct.setVisible(true);
             addproduct.setLocationRelativeTo(null);
+            prod_price.requestFocus();
+            
            addproduct.setAlwaysOnTop(true);
             prod_quant.setEnabled(false);
             addp_label.setText("Edit Product");

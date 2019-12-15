@@ -63,7 +63,31 @@ public void checkpass(){
         log_in lag= new log_in();
         int x =lag.log_in(unamelog, upass);
         
-        if(x==0){
+         if(x==1){
+            //System.out.println("Login Success");
+            if(lag.usertype == 0){
+                JOptionPane.showMessageDialog(rootPane, "Username not confirmed by administrator", "LOGIN WARNING", JOptionPane.WARNING_MESSAGE);
+                //logpass.setText("");
+                //logpass.requestFocus();
+            }else if(lag.usertype == 1){
+                JFrame posact = new pos();
+                posact.setVisible(true);
+                this.setVisible(false);
+                posact.setLocationRelativeTo(null);
+                //POS
+            }else if(lag.usertype == 2){
+                this.setVisible(false);
+                JFrame wel = new welcomepage();
+                wel.setVisible(true);
+                wel.setLocationRelativeTo(null);
+                
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Invalid Username or Password", "LOGIN ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        /*if(x==0){
             JOptionPane.showMessageDialog(regframe,"Invalid Username and Password!","ERROR",JOptionPane.ERROR_MESSAGE);
             logpass.setText("");
             logpass.requestFocus();
@@ -76,7 +100,7 @@ public void checkpass(){
             this.setVisible(false);
             
         }
-    
+    */
         
     }
     
@@ -403,9 +427,9 @@ public void checkpass(){
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-regframe.setVisible(true);
-regframe.setLocationRelativeTo(null);
-this.setVisible(false);
+    regframe.setVisible(true);
+    regframe.setLocationRelativeTo(null);
+    this.setVisible(false);
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -429,44 +453,44 @@ this.setVisible(false);
     }//GEN-LAST:event_uname3MouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-String fn =ftxtfield.getText();
-String ln = ltxtfield.getText();
-String uname = unamefield.getText();
- String pass = new String (passfield.getPassword());
- String repass = new String( repassfield.getPassword());
+    String fn =ftxtfield.getText();
+    String ln = ltxtfield.getText();
+    String uname = unamefield.getText();
+    String pass = new String (passfield.getPassword());
+    String repass = new String( repassfield.getPassword());
  
- int y=reg.confirmpass(pass, repass);
- int z=reg.checkuser(uname);
- 
- if(!"".equals(fn)&& !"".equals(ln)&& !"".equals(uname)&& !"".equals(pass)&& !"".equals(repass)){
-     if(y==1){
-     if(z==0){
-         int x=reg.register(fn, ln, uname, pass);
-     if(x==1){
-         JOptionPane.showMessageDialog(regframe, "Sucessfully Registered");
-         this.clearReg();
-     }
-     }else{
-         JOptionPane.showMessageDialog(regframe,"Username Already Exist!","ERROR",JOptionPane.ERROR_MESSAGE);
-         unamefield.requestFocus();
-     }
-     }else{
-         JOptionPane.showMessageDialog(regframe, "Password does not match","ERROR",JOptionPane.ERROR_MESSAGE);
-         repassfield.setText("");
-         repassfield.requestFocus();
-     }
-     
- }else{
-      JOptionPane.showMessageDialog(regframe, "Please Fill Up All Field","ERROR",JOptionPane.ERROR_MESSAGE);
-     
- }
+        int y=reg.confirmpass(pass, repass);
+        int z=reg.checkuser(uname);
+
+        if(!"".equals(fn)&& !"".equals(ln)&& !"".equals(uname)&& !"".equals(pass)&& !"".equals(repass)){
+            if(y==1){
+            if(z==0){
+                int x=reg.register(fn, ln, uname, pass);
+            if(x==1){
+                JOptionPane.showMessageDialog(regframe, "Sucessfully Registered");
+                this.clearReg();
+            }
+            }else{
+                JOptionPane.showMessageDialog(regframe,"Username Already Exist!","ERROR",JOptionPane.ERROR_MESSAGE);
+                unamefield.requestFocus();
+            }
+            }else{
+                JOptionPane.showMessageDialog(regframe, "Password does not match","ERROR",JOptionPane.ERROR_MESSAGE);
+                repassfield.setText("");
+                repassfield.requestFocus();
+            }
+
+        }else{
+             JOptionPane.showMessageDialog(regframe, "Please Fill Up All Field","ERROR",JOptionPane.ERROR_MESSAGE);
+
+        }
 
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void repassfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_repassfieldKeyReleased
-this.checkpass();
+        this.checkpass();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_repassfieldKeyReleased
@@ -482,25 +506,23 @@ this.checkpass();
     }//GEN-LAST:event_uname_txt1MouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-login();       
-       
-        
-        // TODO add your handling code here:
+    login();       
+     // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void logpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logpassActionPerformed
-login();
-
-        // TODO add your handling code here:
+    login();
+    // TODO add your handling code here:
     }//GEN-LAST:event_logpassActionPerformed
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
-System.exit(0);
+    System.exit(0);
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel8MouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-this.setState(JFrame.ICONIFIED);
+    
+        this.setState(JFrame.ICONIFIED);
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel9MouseClicked
@@ -509,8 +531,6 @@ this.setState(JFrame.ICONIFIED);
 logIn lg = new logIn();
 lg.setVisible(true);
 regframe.setVisible(false);
-
-
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 

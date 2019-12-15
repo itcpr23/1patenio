@@ -27,7 +27,7 @@ public class register {
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = (Connection) DriverManager.getConnection(con.url,con.username,con.password);
             
-            String sql="INSERT INTO `registerlogin`.`user` (`fname`, `lname`, `uname`, `upass`) VALUES (?, ?, ?, md5(?));";
+            String sql="INSERT INTO `registerlogin`.`user` (`fname`, `lname`, `uname`, `upass`) VALUES (?, ?, ?, md5(?),0);";
             PreparedStatement pstmt = (PreparedStatement) conn.prepareStatement(sql);
             
             pstmt.setString(1,firstname );

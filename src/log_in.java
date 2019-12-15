@@ -19,7 +19,8 @@ import java.util.logging.Logger;
  */
 public class log_in {
     connt con = new connt();
-    sess ses = new sess();
+    protected String uname;
+    protected int usertype;
     
     public int log_in(String username, String password){
       int x =0;
@@ -39,10 +40,9 @@ public class log_in {
             
             if(rs.next()){
                 x=1;
-                ses.id = rs.getString("ID");
-            ses.username = rs.getString("uname");
-            ses.firstname = rs.getString("fname");
-            ses.lastname = rs.getString("lname");
+                //ses.id = rs.getString("ID");
+                uname = rs.getString("uname");
+                usertype = rs.getInt("type");
             }
             else{
                 

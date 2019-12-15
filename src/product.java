@@ -120,7 +120,7 @@ public class product {
      public int addproduct1(String product,int quantity,Float price){
          int i=0;
          
-         String sql = "INSERT INTO product (Prod_name, Prod_quantity, Prod_price) VALUES (?,?,?);";
+         String sql = "INSERT INTO product (Prod_name, Prod_quantity, Prod_price,status) VALUES (?,?,?,0);";
          
          
          try{
@@ -134,7 +134,7 @@ public class product {
          pstmt.setString(1,product);
         pstmt.setInt(2,quantity);
          pstmt.setFloat(3, price);
-         pstmt.executeUpdate();
+        i = pstmt.executeUpdate();
          
         /* if(rs.next()){
              i=2;
@@ -170,6 +170,7 @@ public class product {
     }
      
      final void searchBox(String prodname, JTable table){
+         
          String sql="Select * from product where Prod_ID like ? or Prod_name like ?;";
          try{
     Class.forName("com.mysql.jdbc.Driver");
