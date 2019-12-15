@@ -39,7 +39,7 @@ public class welcomepage extends javax.swing.JFrame {
     public welcomepage() {
         initComponents();
         addp.searchBox("", jtb);
-         refreshQuantity.start();
+         refreshQty.start();
         checkLowQuantitys.start();
         
     }
@@ -47,7 +47,7 @@ public class welcomepage extends javax.swing.JFrame {
     public welcomepage(String uname){
         initComponents();
          addp.searchBox("", jtb);
-         refreshQuantity.start();
+         refreshQty.start();
         checkLowQuantitys.start(); 
         
         
@@ -103,8 +103,12 @@ final void refreshQuantitys(String prodname) {
                 int quantity = rs.getInt("Prod_quantity");
                 //model.addRow(new Object[]{rs.getString("id"), rs.getString("product_name"), rs.getString("quantity"), rs.getString("price")});
                 mod.setValueAt(quantity, row, 2);
-                //row++;
+                
+                if(row <= quantity){
+                  row++;  
+                }
             }
+            
 
         }  catch (ClassNotFoundException ex) {
             Logger.getLogger(welcomepage.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,7 +117,7 @@ final void refreshQuantitys(String prodname) {
         }
     }
 
- Thread refreshQuantity = new Thread(new Runnable(){
+ Thread refreshQty = new Thread(new Runnable(){
             
             @Override
             public void run(){
